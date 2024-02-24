@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
 import { BsMoisture } from "react-icons/bs";
 import { CiTempHigh } from "react-icons/ci";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { toast } from "sonner";
 
 const Seeds = () => {
-  const [seedInv, setSeedInv] = useOutletContext();
-
+  const [seedInv, setSeedInv, history, setHistory] = useOutletContext();
+  const nagivate = useNavigate();
   const increase = (id, amount) => {
     const item = seedInv.find((item) => item.id === id);
 
@@ -15,6 +14,22 @@ const Seeds = () => {
       toast.error("Capacity limit reached");
       return;
     }
+
+    // Create a transaction object
+    const currentDate = new Date();
+    const transaction = {
+      id: currentDate.getTime(),
+      type: "increase",
+      itemId: id,
+      amount: amount,
+      timestamp: {
+        date: currentDate.toDateString(), // Extract date
+        time: currentDate.toTimeString(), // Extract time
+      },
+    };
+
+    // Append transaction to history
+    setHistory([...history, transaction]);
 
     const updatedSeedInv = seedInv.map((item) =>
       item.id === id ? { ...item, volume: updatedVolume } : item
@@ -40,6 +55,22 @@ const Seeds = () => {
       toast.error("Volume cannot be less than zero");
       return;
     }
+
+    // Create a transaction object
+    const currentDate = new Date();
+    const transaction = {
+      id: currentDate.getTime(),
+      type: "decrease",
+      itemId: id,
+      amount: amount,
+      timestamp: {
+        date: currentDate.toDateString(), // Extract date
+        time: currentDate.toTimeString(), // Extract time
+      },
+    };
+
+    // Append transaction to history
+    setHistory([...history, transaction]);
 
     const updatedSeedInv = seedInv.map((item) =>
       item.id === id ? { ...item, volume: updatedVolume } : item
@@ -93,11 +124,11 @@ const Seeds = () => {
                 </h1>
                 <h1 className="my-1 font-medium">
                   Max Capacity:{" "}
-                  <span className="font-bold">{item.capacity}</span>
+                  <span className="font-bold">{item.capacity} kg</span>
                 </h1>
                 <h1 className="my-1 font-medium">
                   Current Capacity:{" "}
-                  <span className="font-bold">{item.volume}</span>
+                  <span className="font-bold">{item.volume} kg</span>
                 </h1>
                 <div className="flex items-center gap-3">
                   <form onSubmit={(e) => onIncreaseSubmit(e, item.id)}>
@@ -124,6 +155,12 @@ const Seeds = () => {
                       Remove
                     </button>
                   </form>
+                  <button
+                    className="btn bg-primary text-white hover:bg-primary border-none"
+                    onClick={() => nagivate(`/history/${item.id}`)}
+                  >
+                    History
+                  </button>
                 </div>
               </div>
               <hr className="mt-2" />

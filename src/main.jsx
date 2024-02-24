@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./Root";
 import DashboardHome from "./components/DashboardHome";
 import Seeds from "./components/Seeds";
+import History from "./components/History";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,14 @@ const router = createBrowserRouter([
       {
         path: "/seeds",
         element: <Seeds></Seeds>,
+      },
+      {
+        path: "/history",
+        element: <History></History>,
+      },
+      {
+        path: "/history/:id",
+        element: <History></History>,
       },
       {
         path: "/machines",

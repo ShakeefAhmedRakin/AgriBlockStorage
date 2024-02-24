@@ -34,6 +34,98 @@ const Root = () => {
       capacity: 2000,
       warehouse: 1,
     },
+    {
+      id: 3,
+      name: "Corn",
+      temperature: 9,
+      moisture: 4,
+      volume: 1600,
+      capacity: 2500,
+      warehouse: 1,
+    },
+  ]);
+
+  const [history, setHistory] = useState([
+    {
+      id: 1708808131243,
+      type: "increase",
+      itemId: 1,
+      amount: 200,
+      timestamp: {
+        date: "Sun Feb 25 2024",
+        time: "02:55:31 GMT+0600 (East Kazakhstan Time)",
+      },
+    },
+    {
+      id: 1708808133024,
+      type: "decrease",
+      itemId: 1,
+      amount: 100,
+      timestamp: {
+        date: "Sun Feb 25 2024",
+        time: "02:55:33 GMT+0600 (East Kazakhstan Time)",
+      },
+    },
+    {
+      id: 1708808134742,
+      type: "increase",
+      itemId: 1,
+      amount: 50,
+      timestamp: {
+        date: "Sun Feb 25 2024",
+        time: "02:55:34 GMT+0600 (East Kazakhstan Time)",
+      },
+    },
+    {
+      id: 1708808136709,
+      type: "decrease",
+      itemId: 1,
+      amount: 20,
+      timestamp: {
+        date: "Sun Feb 25 2024",
+        time: "02:55:36 GMT+0600 (East Kazakhstan Time)",
+      },
+    },
+    {
+      id: 1708808131243,
+      type: "increase",
+      itemId: 2,
+      amount: 300,
+      timestamp: {
+        date: "Sun Feb 25 2024",
+        time: "02:55:31 GMT+0600 (East Kazakhstan Time)",
+      },
+    },
+    {
+      id: 1708808133024,
+      type: "decrease",
+      itemId: 2,
+      amount: 700,
+      timestamp: {
+        date: "Sun Feb 25 2024",
+        time: "02:55:33 GMT+0600 (East Kazakhstan Time)",
+      },
+    },
+    {
+      id: 1708808134742,
+      type: "increase",
+      itemId: 2,
+      amount: 70,
+      timestamp: {
+        date: "Sun Feb 24 2024",
+        time: "02:50:34 GMT+0600 (East Kazakhstan Time)",
+      },
+    },
+    {
+      id: 1708808136709,
+      type: "increase",
+      itemId: 2,
+      amount: 5,
+      timestamp: {
+        date: "Sun Feb 25 2024",
+        time: "02:55:36 GMT+0600 (East Kazakhstan Time)",
+      },
+    },
   ]);
 
   return (
@@ -52,7 +144,7 @@ const Root = () => {
             </label>
             <div className="p-2 md:p-4 md:h-full ml-0 md:ml-[333px]">
               <hr className="mt-[54px] block md:hidden" />
-              <Outlet context={[seedInv, setSeedInv]}></Outlet>
+              <Outlet context={[seedInv, setSeedInv, history, setHistory]} />
             </div>
           </div>
           <div className="drawer-side h-full z-50">
