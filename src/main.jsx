@@ -6,6 +6,7 @@ import Root from "./Root";
 import DashboardHome from "./components/DashboardHome";
 import Seeds from "./components/Seeds";
 import History from "./components/History";
+import Equipments from "./components/Equipments";
 
 const router = createBrowserRouter([
   {
@@ -30,12 +31,8 @@ const router = createBrowserRouter([
         element: <History></History>,
       },
       {
-        path: "/machines",
-        element: <></>,
-      },
-      {
-        path: "/seedstools",
-        element: <></>,
+        path: "/equipments",
+        element: <Equipments></Equipments>,
       },
     ],
   },
