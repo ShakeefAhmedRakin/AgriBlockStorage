@@ -4,6 +4,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./Root";
 import DashboardHome from "./components/DashboardHome";
+import Seeds from "./components/Seeds";
 
 const router = createBrowserRouter([
   {
@@ -16,8 +17,8 @@ const router = createBrowserRouter([
         element: <DashboardHome></DashboardHome>,
       },
       {
-        path: "/seedstools",
-        element: <></>,
+        path: "/seeds",
+        element: <Seeds></Seeds>,
       },
       {
         path: "/machines",

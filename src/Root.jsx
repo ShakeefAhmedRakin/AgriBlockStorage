@@ -26,7 +26,7 @@ const Root = () => {
               <span className="text-xs">Menu</span>
               <TbLayoutSidebarLeftExpandFilled />
             </label>
-            <div className="p-2 md:p-4 md:h-full ml-0 md:ml-[321px]">
+            <div className="p-2 md:p-4 md:h-full ml-0 md:ml-[333px]">
               <hr className="mt-[54px] block md:hidden" />
               <Outlet></Outlet>
             </div>
@@ -37,7 +37,7 @@ const Root = () => {
               aria-label="close sidebar"
               className="drawer-overlay"
             ></label>
-            <ul className="menu h-full p-4 w-80 bg-base-200 text-base-content fixed">
+            <ul className="menu h-full p-4 w-82 bg-base-200 text-base-content fixed">
               {/* Sidebar content here */}
               <div className="flex justify-between items-center gap-2">
                 <div className="text-secondary flex items-center gap-4">
@@ -57,27 +57,26 @@ const Root = () => {
               <div className="flex flex-col text-lg font-heading font-medium gap-4">
                 {/* SHARED ROUTE */}
                 <NavLink
-                  to={"/dashboard/"}
+                  to={"/"}
                   onClick={closeSidebar}
                   className={`p-2 w-full border-2 hover:underline rounded-xl ${
-                    location.pathname === "/dashboard" ? "text-primary" : ""
-                  } ${
-                    location.pathname === "/dashboard/" ? "text-primary" : ""
-                  } `}
+                    location.pathname === "/" ? "text-primary font-bold" : ""
+                  } ${location.pathname === "/test" ? "" : ""} `}
                 >
                   <li>Dashboard</li>
                 </NavLink>
                 <NavLink
-                  to={"/dashboard/profile"}
+                  to={"/seeds"}
                   onClick={closeSidebar}
                   className={`p-2 w-full border-2 hover:underline rounded-xl ${
-                    location.pathname === "/dashboard/profile"
-                      ? "text-primary"
+                    location.pathname === "/seeds"
+                      ? "text-primary font-bold"
                       : ""
-                  }`}
+                  } ${location.pathname === "/test" ? "" : ""} `}
                 >
-                  <li>My Profile</li>
+                  <li>Seeds</li>
                 </NavLink>
+
                 <hr />
 
                 <hr className="my-2" />
