@@ -4,6 +4,8 @@ import { TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
 import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
 import { GrLogout } from "react-icons/gr";
 import "./Root.css";
+import { useState } from "react";
+import { Toaster } from "sonner";
 
 const Root = () => {
   const closeSidebar = () => {
@@ -13,9 +15,31 @@ const Root = () => {
     }
   };
 
+  const [seedInv, setSeedInv] = useState([
+    {
+      id: 1,
+      name: "Rice",
+      temperature: 4,
+      moisture: 5,
+      volume: 700,
+      capacity: 1000,
+      warehouse: 2,
+    },
+    {
+      id: 2,
+      name: "Wheat",
+      temperature: 2,
+      moisture: 3,
+      volume: 200,
+      capacity: 2000,
+      warehouse: 1,
+    },
+  ]);
+
   return (
     <>
       <>
+        <Toaster position="bottom-right" richColors />
         <div className="drawer md:drawer-open h-full">
           <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content overflow-x-auto">
@@ -28,7 +52,7 @@ const Root = () => {
             </label>
             <div className="p-2 md:p-4 md:h-full ml-0 md:ml-[333px]">
               <hr className="mt-[54px] block md:hidden" />
-              <Outlet></Outlet>
+              <Outlet context={[seedInv, setSeedInv]}></Outlet>
             </div>
           </div>
           <div className="drawer-side h-full z-50">
