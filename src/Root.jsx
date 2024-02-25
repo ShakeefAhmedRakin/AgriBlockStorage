@@ -51,7 +51,7 @@ const Root = () => {
       moisture: 2,
       volume: 50,
       capacity: 200,
-      warehouse: 3,
+      warehouse: 4,
     },
   ]);
 
