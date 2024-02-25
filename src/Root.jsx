@@ -4,9 +4,20 @@ import { TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
 import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
 import "./Root.css";
 import { useState } from "react";
-import { Toaster } from "sonner";
+import { toast } from "sonner";
+import useAuth from "./hooks/useAuth";
 
 const Root = () => {
+  const { user, logOut } = useAuth();
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {
+        toast.success("User Logged Out");
+      })
+      .catch((error) => console.log(error));
+  };
+
   const closeSidebar = () => {
     const closeBtn = document.getElementById("my-drawer-2");
     if (closeBtn) {
@@ -192,7 +203,6 @@ const Root = () => {
   return (
     <>
       <>
-        <Toaster position="bottom-right" richColors />
         <div className="drawer md:drawer-open h-full">
           <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content overflow-x-auto">
@@ -274,6 +284,28 @@ const Root = () => {
                   <li className="">Equipments</li>
                 </NavLink>
                 <hr />
+                {user ? (
+                  <>
+                    <div className="flex flex-col justify-center items-center gap-2 rounded-lg text-white">
+                      <img
+                        src={user?.photoURL}
+                        className="w-12 aspect-square rounded-full"
+                      />
+                      <p className="text-secondary font-bold">
+                        {user?.displayName}
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
+                <hr />
+                <button
+                  className="btn bg-red-500 text-white hover:bg-red-600 border-none"
+                  onClick={() => handleLogOut()}
+                >
+                  Logout
+                </button>
               </div>
             </ul>
           </div>

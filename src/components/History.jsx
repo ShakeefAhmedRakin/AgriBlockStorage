@@ -1,27 +1,39 @@
-import { useOutletContext, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const History = () => {
   const { id } = useParams();
-  const intId = parseInt(id);
-  const [seedInv, setSeedInv, history, setHistory] = useOutletContext();
+  const [loading, setLoading] = useState(true);
+  const [allRecords, setAllRecords] = useState([]);
+  const { user } = useAuth();
 
-  if (!seedInv.some((item) => item.id === intId)) {
-    return (
-      <div className="flex justify-center h-screen items-center text-2xl font-bold text-red-500">{`Resource does not exist`}</div>
-    );
-  }
+  useEffect(() => {
+    setLoading(true);
+    fetch(`http://localhost:5000/history/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setAllRecords(data);
+        setLoading(false);
+      });
+  }, [user]);
 
-  const filteredHistory = history.filter((record) => record.itemId === intId);
-  filteredHistory.sort((a, b) => {
-    // Extracting timestamps
+  const filteredRecords = allRecords.filter((record) => record.itemId === id);
+  filteredRecords.sort((a, b) => {
     const timestampA = new Date(`${a.timestamp.date} ${a.timestamp.time}`);
     const timestampB = new Date(`${b.timestamp.date} ${b.timestamp.time}`);
-
-    // Comparing timestamps
     return timestampB - timestampA;
   });
 
-  if (filteredHistory.length <= 0) {
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <span className="loading loading-bars loading-lg text-black"></span>
+      </div>
+    );
+  }
+
+  if (filteredRecords.length <= 0) {
     return (
       <div className="flex justify-center h-screen items-center text-2xl font-bold text-red-500">{`No Records`}</div>
     );
@@ -41,11 +53,9 @@ const History = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredHistory.map((record) => (
-              <tr key={record.id}>
-                <td className="text-lg">
-                  {seedInv.find((item) => item.id === record.itemId)?.name}
-                </td>
+            {filteredRecords.map((record) => (
+              <tr key={record._id}>
+                <td className="text-lg">{record.name}</td>
                 <td className="text-lg">{record.timestamp.date}</td>
                 <td className="text-lg">{record.timestamp.time}</td>
                 <td

@@ -5,7 +5,6 @@ const DashboardHome = () => {
   const [seedInv, setSeedInv, history, setHistory, machines, setMachines] =
     useOutletContext();
 
-  // Use useState to manage lowCount
   const [lowCount, setLowCount] = useState(0);
 
   useEffect(() => {
