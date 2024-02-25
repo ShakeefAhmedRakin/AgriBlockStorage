@@ -15,7 +15,7 @@ const DashboardHome = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:5000/seeds/${user.email}`)
+    fetch(`https://bitsandbuild.vercel.app/seeds/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setSeeds(data);
@@ -25,7 +25,7 @@ const DashboardHome = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:5000/equipments/${user.email}`)
+    fetch(`https://bitsandbuild.vercel.app/equipments/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setEquipments(data);
