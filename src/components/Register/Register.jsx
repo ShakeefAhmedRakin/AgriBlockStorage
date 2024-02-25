@@ -42,7 +42,7 @@ const Register = () => {
                   e.target.reset();
                   setTimeout(() => {
                     navigate("/");
-                  }, 2000);
+                  }, 500);
                 })
                 .catch((error) => {
                   console.log("Error from logging in user" + error);

@@ -18,7 +18,7 @@ const Login = () => {
         e.target.reset();
         setTimeout(() => {
           navigate("/");
-        }, 2000);
+        }, 500);
       })
       .catch((error) => {
         toast.error(error.message);

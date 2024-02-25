@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react"; // Import useState
-import { useOutletContext } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
 const DashboardHome = () => {
-  const [seedInv, setSeedInv, history, setHistory, machines, setMachines] =
-    useOutletContext();
-
   const [loading, setLoading] = useState(true);
   const [seeds, setSeeds] = useState([]);
   const [equipments, setEquipments] = useState([]);

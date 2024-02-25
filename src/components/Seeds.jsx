@@ -211,6 +211,7 @@ const Seeds = () => {
       .then((data) => {
         toast.success("Seed Added!");
         setReloadData(true);
+        document.getElementById("addseedmodal").close();
         console.log("Success:", data);
       })
       .catch((error) => {
@@ -364,8 +365,8 @@ const Seeds = () => {
           )}
         </>
       )}
-      <dialog id="addseedmodal" className="modal">
-        <div className="modal-box">
+      <dialog id="addseedmodal" className={`modal`}>
+        <div className="modal-box  overflow-y-scroll">
           <form className="space-y-4" onSubmit={addSeed}>
             <div className="grid grid-cols-2 gap-6">
               <div>
