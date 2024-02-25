@@ -112,7 +112,9 @@ const Seeds = () => {
               </div>
               {/* BAR/CAPACITY */}
               <progress
-                className="progress h-7 mt-2 progress-success w-[100%]"
+                className={`progress ${
+                  item.volume / item.capacity < 0.3 ? "progress-error" : ""
+                } h-7 mt-2 progress-success w-[100%]`}
                 value={item.volume}
                 max={item.capacity}
               ></progress>

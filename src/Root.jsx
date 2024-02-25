@@ -44,6 +44,15 @@ const Root = () => {
       capacity: 2500,
       warehouse: 3,
     },
+    {
+      id: 4,
+      name: "Sunflower",
+      temperature: 12,
+      moisture: 2,
+      volume: 50,
+      capacity: 200,
+      warehouse: 3,
+    },
   ]);
 
   const [history, setHistory] = useState([
