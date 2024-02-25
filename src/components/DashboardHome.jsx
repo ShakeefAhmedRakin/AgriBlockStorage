@@ -1,24 +1,48 @@
 import { useEffect, useState } from "react"; // Import useState
 import { useOutletContext } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const DashboardHome = () => {
   const [seedInv, setSeedInv, history, setHistory, machines, setMachines] =
     useOutletContext();
 
+  const [loading, setLoading] = useState(true);
+  const [seeds, setSeeds] = useState([]);
+  const [equipments, setEquipments] = useState([]);
   const [lowCount, setLowCount] = useState(0);
 
+  const { user } = useAuth();
+
   useEffect(() => {
-    let count = 0; // Initialize count
+    setLoading(true);
+    fetch(`http://localhost:5000/seeds/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setSeeds(data);
+        setLoading(false);
+      });
+  }, [user]);
 
-    // Count items with volume/capacity ratio less than 50%
-    for (const item of seedInv) {
-      if ((item.volume / item.capacity) * 100 < 50) {
-        count++;
-      }
-    }
+  useEffect(() => {
+    setLoading(true);
+    fetch(`http://localhost:5000/equipments/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setEquipments(data);
+        setLowCount(
+          seeds.filter((item) => item.volume / item.capacity < 0.3).length
+        );
+        setLoading(false);
+      });
+  }, [user, lowCount, seeds]);
 
-    setLowCount(count);
-  }, [seedInv]);
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <span className="loading loading-bars loading-lg text-black"></span>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -32,7 +56,7 @@ const DashboardHome = () => {
         <div className="bg-[#02BCE9] py-10 flex justify-around items-center rounded-lg shadow-xl">
           <div className="text-right">
             <p className=" text-center text-3xl font-bold">
-              {machines.filter((item) => item.loaned).length}
+              {equipments.filter((item) => item.loaned).length}
             </p>
             <p>Loaned Equipments</p>
           </div>
@@ -41,7 +65,7 @@ const DashboardHome = () => {
           <div className="text-right">
             <p className=" text-center text-3xl font-bold">
               {
-                machines.filter((item) => item.availability === "Maintenance")
+                equipments.filter((item) => item.availability === "Maintenance")
                   .length
               }
             </p>{" "}
@@ -50,7 +74,7 @@ const DashboardHome = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-6 mt-8">
-        {seedInv.map((item) => (
+        {seeds.map((item) => (
           <div key={item.id}>
             <hr className="my-2" />
             <div className="ml-1 flex flex-col lg:flex-row items-center gap-2">

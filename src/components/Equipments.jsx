@@ -1,12 +1,25 @@
-import { useOutletContext } from "react-router-dom";
 import { IoMdAdd } from "react-icons/io";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useAuth from "../hooks/useAuth";
+import { toast } from "sonner";
 
 const Equipments = () => {
-  const [seedInv, setSeedInv, history, setHistory, machines, setMachines] =
-    useOutletContext();
-
   const [loaned, setLoaned] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [equipments, setEquipments] = useState([]);
+  const [reloadData, setReloadData] = useState(false);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`http://localhost:5000/equipments/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setEquipments(data);
+        setLoading(false);
+        setReloadData(false);
+      });
+  }, [user, reloadData]);
 
   const addMachine = (e) => {
     e.preventDefault();
@@ -30,7 +43,7 @@ const Equipments = () => {
     const loaned = status === "owned" ? false : true;
 
     const data = {
-      id: machines.length + 1,
+      email: user.email,
       name: name,
       loaned: loaned,
       loandetails: {
@@ -41,7 +54,28 @@ const Equipments = () => {
       availability: availability,
       quantity: quantity,
     };
-    setMachines([...machines, data]);
+    fetch("http://localhost:5000/equipments", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Set the content type according to your data
+        // Add any additional headers if required
+      },
+      body: JSON.stringify(data), // Convert data to JSON string
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json(); // Parse the JSON response
+      })
+      .then((data) => {
+        toast.success("Equipment Added!");
+        setReloadData(true);
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
@@ -60,66 +94,89 @@ const Equipments = () => {
             </button>
           </h1>
           <hr className="my-2" />
-          <div className="overflow-x-auto">
-            <table className="table table-zebra">
-              {/* head */}
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Name</th>
-                  <th>Quantity</th>
-                  <th>Status</th>
-                  <th>Availability</th>
-                </tr>
-              </thead>
-              <tbody>
-                {machines.map((machine) => (
-                  <tr key={machine.id}>
-                    <td>{machine.id}</td>
-                    <td>{machine.name}</td>
-                    <td>{machine.quantity}</td>
-                    <td className="whitespace-nowrap">
-                      {!machine.loaned ? (
-                        <span className="text-green-500 font-bold">Owned</span>
-                      ) : (
-                        <p className="text-red-500 font-bold">
-                          Loaned:{" "}
-                          <span className="text-black">
-                            {machine.loandetails.taken}
-                          </span>{" "}
-                          <br />
-                          Return By:{" "}
-                          <span className="text-black">
-                            {machine.loandetails.return}
-                          </span>{" "}
-                          <br />
-                          Location:{" "}
-                          <span className="text-black">
-                            {machine.loandetails.location}
-                          </span>
-                        </p>
-                      )}
-                    </td>
-                    <td
-                      className={`font-bold ${
-                        machine.availability === "In Use"
-                          ? "text-orange-400"
-                          : ""
-                      } ${
-                        machine.availability === "Maintenance"
-                          ? "text-red-400"
-                          : ""
-                      } ${
-                        machine.availability === "Idle" ? "text-green-400" : ""
-                      }`}
-                    >
-                      {machine.availability}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          {loading ? (
+            <>
+              <div className="h-screen flex items-center justify-center">
+                <span className="loading loading-bars loading-lg text-black"></span>
+              </div>
+            </>
+          ) : (
+            <>
+              {equipments.length > 0 ? (
+                <>
+                  <div className="overflow-x-auto">
+                    <table className="table table-zebra">
+                      {/* head */}
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Quantity</th>
+                          <th>Status</th>
+                          <th>Availability</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {equipments.map((machine) => (
+                          <tr key={machine._id}>
+                            <td>{machine.name}</td>
+                            <td>{machine.quantity}</td>
+                            <td className="whitespace-nowrap">
+                              {!machine.loaned ? (
+                                <span className="text-green-500 font-bold">
+                                  Owned
+                                </span>
+                              ) : (
+                                <p className="text-red-500 font-bold">
+                                  Loaned:{" "}
+                                  <span className="text-black">
+                                    {machine.loandetails.taken}
+                                  </span>{" "}
+                                  <br />
+                                  Return By:{" "}
+                                  <span className="text-black">
+                                    {machine.loandetails.return}
+                                  </span>{" "}
+                                  <br />
+                                  Location:{" "}
+                                  <span className="text-black">
+                                    {machine.loandetails.location}
+                                  </span>
+                                </p>
+                              )}
+                            </td>
+                            <td
+                              className={`font-bold ${
+                                machine.availability === "In Use"
+                                  ? "text-orange-400"
+                                  : ""
+                              } ${
+                                machine.availability === "Maintenance"
+                                  ? "text-red-400"
+                                  : ""
+                              } ${
+                                machine.availability === "Idle"
+                                  ? "text-green-400"
+                                  : ""
+                              }`}
+                            >
+                              {machine.availability}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="h-screen flex text-center text-2xl justify-center items-center">
+                    No Equipments Added Yet! <br />
+                    Add One!
+                  </div>
+                </>
+              )}
+            </>
+          )}
         </div>
       </div>
       <dialog id="machinemodal" className="modal">

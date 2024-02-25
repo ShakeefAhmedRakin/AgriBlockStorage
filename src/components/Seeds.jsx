@@ -175,7 +175,7 @@ const Seeds = () => {
     const capacity = form.elements["capacity"].value;
     const warehouse = form.elements["warehouse"].value;
 
-    if (volume > capacity) {
+    if (parseInt(volume) > parseInt(capacity)) {
       toast.error("Capacity Exceeded");
       return;
     }
@@ -227,6 +227,31 @@ const Seeds = () => {
           {seeds.length > 0 ? (
             <>
               <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <button
+                    className="btn bg-primary hover:bg-primary border-none text-white"
+                    onClick={() =>
+                      document.getElementById("addseedmodal").showModal()
+                    }
+                  >
+                    Add Seed
+                  </button>
+                  <h1>
+                    Total Seeds:{" "}
+                    <span className="font-bold">{seeds.length}</span>
+                  </h1>
+                  <h1>
+                    Low Volume Seeds:{" "}
+                    <span className="font-bold">
+                      {
+                        seeds.filter(
+                          (item) => item.volume / item.capacity < 0.3
+                        ).length
+                      }
+                    </span>
+                  </h1>
+                </div>
+                <hr className="my-2" />
                 {/* DATA */}
                 {seeds.map((item) => (
                   <div className="flex gap-4" key={item._id}>
